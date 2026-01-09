@@ -4,9 +4,9 @@ const { userRegister, allUsers, userLogin } = require('../controllers/userContro
 const router = express.Router();
 
 // endpoints
-const USER_REGISTER = process.env.USER_REGISTER || '/api/user/register';
-const USER_LOGIN = '/api/user/login';
-const USERS = process.env.USERS || '/api/user';
+const USER_REGISTER = process.env.USER_REGISTER || '/register';
+const USER_LOGIN = process.env.USER_LOGIN || '/login';
+const USERS = process.env.USERS || '/user';
 
 // user register
 router.post(USER_REGISTER , userRegister);

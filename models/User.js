@@ -17,6 +17,9 @@ const userSchema =  mongoose.Schema(
         },
     },
     {
+        versionKey: false,
+    },
+    {
         timestamps: true,
     }
 );
