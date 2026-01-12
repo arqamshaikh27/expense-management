@@ -4,6 +4,8 @@ const userRouter = require('./routes/userRoute');
 const expenseRouter = require('./routes/expenseRoute');
 const incomeRouter = require('./routes/incomeRoute');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const { default: rateLimit } = require('express-rate-limit');
 const app = express();
 
 // endpoints
@@ -16,7 +18,20 @@ mongoose.connect(MONGOOSE_URL)
 .then(() => {
     console.log("Database has been connected")
 })
-.catch(err => console.log("There is a error" , err))
+.catch(err => console.log("There is a error" , err));
+
+// security middleware
+app.use(helmet());
+
+//Rate limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 100,
+    message: 'To many request from this apis. Please try again later',
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+app.use(limiter);
 
 // body middleware
 app.use(express.json());
@@ -26,7 +41,7 @@ app.use(userRouter);
 app.use(expenseRouter);
 app.use(incomeRouter);
 
-// error handling middleware
+// global error handling middleware
 app.use((err, req ,res ,next) => {
     const status = err.status || 500;
     console.error(`Error : ${err.message}`);

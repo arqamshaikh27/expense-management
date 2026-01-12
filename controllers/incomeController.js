@@ -46,4 +46,61 @@ const manageIncome = async (req , res , next) => {
     }
 }
 
-module.exports = {addIncome , manageIncome};
+// get income amount
+const incomeAmount = async (req , res ,next) => 
+{
+    const pipeline = [
+        {
+            $group: {
+                _id: null,
+                totalAmount: { $sum: "$amount"}
+            }
+        }
+    ];
+    try
+    {
+        const incomeamount = await Income.aggregate(pipeline).exec();
+        if(!incomeamount)
+        {
+            const error = new Error("Income Not Found");
+            error.status = 400;
+            throw error;
+        }
+        res.json(incomeamount);
+    }
+    catch(err)
+    {
+        next(err);
+    }
+}
+
+// delete the income
+const incomeDelete = async (req , res , next) => {
+    try
+    {
+        const {id} = req.body;
+        if(!id)
+        {
+            const error = new Error("ID is required");
+            error.status = 400;
+            throw error;
+        }
+        
+        // delete the income
+        const deleteIncome = await Income.findByIdAndDelete(id);
+        if(!deleteIncome)
+        {
+            const error = new Error("Income not found");
+            error.status = 400;
+            throw error;
+        }
+
+        res.json("Income is deleted");
+    }
+    catch(err)
+    {
+        next(err);
+    }
+}
+
+module.exports = {addIncome , manageIncome , incomeAmount , incomeDelete};

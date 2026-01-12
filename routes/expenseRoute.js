@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { addExpense, manageExpense } = require('../controllers/expenseController');
+const { addExpense, manageExpense, expenseAmount, expenseDelete } = require('../controllers/expenseController');
 const router = express.Router();
 
 // endpoints
@@ -11,5 +11,9 @@ const MANAGE_EXPENSE = process.env.MANAGE_EXPENSE || '/expense/manage';
 router.post(ADD_EXPENSE , addExpense);
 // show all the expenses
 router.get(MANAGE_EXPENSE , manageExpense);
+// get the expense amount
+router.get('/api/user/expense' , expenseAmount);
+// delete expense
+router.delete('/api/user/expense/delete' , expenseDelete);
 
 module.exports = router;

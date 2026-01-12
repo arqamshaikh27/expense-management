@@ -34,12 +34,6 @@ const userRegister = async (req , res) => {
 // user Login
 const userLogin = async (req , res) => {
     const {email , password} = req.body;
-    if(!email || !password)
-    {
-        const error = new Error("All fields are required");
-        error.status = 400;
-        throw error;
-    }
 
     // check the user exists or not
     const checkUser = await User.findOne({
